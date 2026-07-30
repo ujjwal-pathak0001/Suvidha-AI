@@ -3,7 +3,9 @@ import { useAuth } from '../context/AuthContext';
 import { convertText } from '../api/api';
 import './Converter.css';
 
-const DJANGO_STATIC = 'http://127.0.0.1:8000/static/';
+const API_BASE = import.meta.env.VITE_API_URL || '/api';
+const BACKEND_BASE = API_BASE.replace(/\/api\/?$/, '');
+const DJANGO_STATIC = `${BACKEND_BASE}/static/`;
 
 export default function Converter() {
   const { user, token } = useAuth();

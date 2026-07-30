@@ -97,7 +97,7 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'assets'),
 ]
 # WhiteNoise compression + caching
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 
 # ── REST Framework ────────────────────────────────────────────────────────────
 REST_FRAMEWORK = {
