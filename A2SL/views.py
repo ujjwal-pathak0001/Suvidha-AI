@@ -79,16 +79,24 @@ def process_text_to_signs(text):
     elif probable_tense == "present" and tense["present_continuous"] >= 1:
         words = ["Now"] + words
 
-    # Map to available video files (fall back to individual letters)
+    # Map to available video files (case-insensitive for Linux)
     final_words = []
     for w in words:
-        path = w + ".mp4"
-        f = finders.find(path)
-        if not f:
-            for c in w:
-                final_words.append(c)
+        candidates = [w.capitalize(), w.upper(), w, w.lower()]
+        found = None
+        for cand in candidates:
+            if finders.find(cand + ".mp4"):
+                found = cand
+                break
+        if found:
+            final_words.append(found)
         else:
-            final_words.append(w)
+            for c in w:
+                c_upper = c.upper()
+                if finders.find(c_upper + ".mp4"):
+                    final_words.append(c_upper)
+                else:
+                    final_words.append(c)
 
     return final_words
 
