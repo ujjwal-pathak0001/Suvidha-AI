@@ -20,6 +20,7 @@ nltk.download('punkt_tab',quiet=True)
 SECRET_KEY = config('SECRET_KEY', default='3k7=!d39#4@_&5a6to&4=_=j(c^v0(vv91cj5+9e8+d4&+01jb')
 DEBUG      = config('DEBUG', default=False, cast=bool)
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='*').split(',')
+CSRF_TRUSTED_ORIGINS = config('CSRF_TRUSTED_ORIGINS', default='https://*.vercel.app,http://localhost:5173,http://127.0.0.1:5173').split(',')
 
 # ── Apps ──────────────────────────────────────────────────────────────────────
 INSTALLED_APPS = [
