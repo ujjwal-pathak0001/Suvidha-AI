@@ -1,30 +1,114 @@
-# Audio Speech To Sign Language Converter
+# Audio Speech to Sign Language Converter
 
-A Web Application which takes in live audio speech recording as input, converts it into text and displays the relevant Indian Sign Language animations.
+A modern full-stack web application that converts spoken words into text and maps them to Indian Sign Language visuals for better accessibility and communication. The project combines speech recognition, natural language processing, and animated sign-language output into a simple and interactive experience.
 
-> - Front-end using HTML,CSS,JavaScript.
-> - Speech recognition using JavaScript Web speech API.
-> - Text Preprocessing using Natural Language Toolkit(NLTK).
-> - A 3D animation of a character created
->   using Blender 3D tool.
+## 🌟 Overview
 
-Project Demo Video: https://youtu.be/YiHhD0QGrno
+This project aims to bridge the communication gap for people who rely on sign language by transforming live speech input into meaningful sign-language representations. It is designed as both a practical accessibility tool and a strong portfolio project showcasing full-stack development, NLP, and UI/UX implementation.
 
-## Prerequisites
+## ✨ Features
 
-> - Python >= 3.7
-> - Browser supports Web Speech API
-> - Download all required packages for python script A2SL/views.py
+- Live speech-to-text conversion using the browser Web Speech API
+- Text preprocessing and linguistic transformation with NLTK
+- Conversion of processed text into sign-related outputs for animation rendering
+- User authentication and session-based access
+- Modern React-based frontend with a clean interface
+- Django REST API backend for handling auth and conversion requests
 
-## Installation Guide:
+## 🛠️ Tech Stack
 
-These instructions will get you download the project and running on your local machine for development and testing purposes.
+### Backend
+- Python
+- Django
+- Django REST Framework
+- NLTK
 
-### Instructions
+### Frontend
+- React
+- Vite
+- Axios
+- React Router
 
-1. Open the Downloads folder and then open the terminal.
-2. From the terminal, run the python file using the command "python manage.py runserver ####" (#### optional port number).
-3. From the terminal, it shows localhost address (looks like this "server at http://127.0.0.1:8000/") run on browser.
-4. Sign up and start exploring.
-5. Click on mic button to record speech.
-6. Speech is going to processed and respective animated outputs are shown accordingly and it also support entered text manually.
+
+## � Project Owner
+
+- Name: Ujjwal Pathak
+- LinkedIn: https://www.linkedin.com/in/ujjwal-pathak0001
+
+## �📁 Project Structure
+
+```text
+A2SL/                 # Django project files
+backend/              # Backend-related project files
+frontend/             # React + Vite frontend
+assets/               # Static assets and media resources
+templates/            # Django HTML templates
+```
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Python 3.8+
+- Node.js and npm
+- A modern browser with microphone support
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/ujjwal-pathak0001/Suvidha-AI.git
+cd Suvidha-AI
+```
+
+### 2. Set up the backend
+
+```bash
+python -m venv venv
+source venv/bin/activate   # On Windows: venv\Scripts\activate
+pip install -r requirements.txt
+python -m nltk.downloader punkt stopwords averaged_perceptron_tagger wordnet
+python manage.py migrate
+python manage.py runserver 8000
+```
+
+The backend will be available at:
+```text
+http://127.0.0.1:8000/
+```
+
+### 3. Set up the frontend
+
+Open a new terminal and run:
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+The frontend will be available at:
+```text
+http://127.0.0.1:5173/
+```
+
+## ▶️ How to Use
+
+1. Create an account or log in.
+2. Open the converter page.
+3. Click the microphone button and speak clearly.
+4. The app will process your speech and display the corresponding sign-language outputs.
+5. You can also enter text manually if needed.
+
+## 🔧 Notes
+
+- The speech recognition feature depends on browser support for the Web Speech API.
+- Some NLP resources are downloaded via NLTK the first time you run the project.
+- For production deployment, you may want to configure a proper environment and hosting setup for both backend and frontend.
+
+## 🤝 Contributing
+
+Contributions are welcome. If you would like to improve the project, feel free to fork the repository and submit a pull request.
+
+## 📜 License
+
+This project is open-source and available under the terms of the repository license.
