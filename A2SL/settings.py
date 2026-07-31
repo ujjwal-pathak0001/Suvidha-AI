@@ -96,8 +96,12 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'assets'),
 ]
-# WhiteNoise compression + caching
+# WhiteNoise: use basic storage (not manifest) so filenames stay unchanged
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
+# Allow WhiteNoise to serve .mp4 video files
+WHITENOISE_MIMETYPES = {
+    '.mp4': 'video/mp4',
+}
 
 # ── REST Framework ────────────────────────────────────────────────────────────
 REST_FRAMEWORK = {

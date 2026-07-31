@@ -15,11 +15,4 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'A2SL.settings')
 
 application = get_wsgi_application()
 
-# Run collectstatic automatically on startup for cloud deployment (Render/Railway)
-try:
-    from django.core.management import call_command
-    from django.conf import settings
-    call_command('collectstatic', interactive=False)
-except Exception as e:
-    print(f"Auto collectstatic status: {e}")
 
