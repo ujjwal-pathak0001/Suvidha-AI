@@ -13,7 +13,6 @@ This project aims to bridge the communication gap for people who rely on sign la
 | 🚀 **Web App (Frontend)** | [suvidha-ai-nine.vercel.app](https://suvidha-ai-nine.vercel.app) | Vercel |
 | 📷 **Camera Sign Recognizer** | [suvidha-ai-nine.vercel.app/recognize](https://suvidha-ai-nine.vercel.app/recognize) | Vercel |
 | ⚙️ **Backend REST API** | [suvidha-ai-tool-for-isl.onrender.com](https://suvidha-ai-tool-for-isl.onrender.com) | Render |
-| 👑 **Django Admin Portal** | [suvidha-ai-tool-for-isl.onrender.com/admin/](https://suvidha-ai-tool-for-isl.onrender.com/admin/) | Render |
 
 ## ✨ Features
 
