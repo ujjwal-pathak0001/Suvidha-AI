@@ -53,17 +53,30 @@ export default function SignRecognizer() {
 
       // Get camera stream
       const stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: 'user', width: 640, height: 480 },
+        video: { facingMode: 'user', width: { ideal: 640 }, height: { ideal: 480 } },
         audio: false,
       });
       streamRef.current = stream;
 
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
-        await videoRef.current.play();
+        // Wait for video to be ready before playing
+        await new Promise((resolve, reject) => {
+          videoRef.current.onloadedmetadata = () => {
+            videoRef.current.play()
+              .then(resolve)
+              .catch(reject);
+          };
+          videoRef.current.onerror = reject;
+        });
       }
       setCameraActive(true);
     } catch (err) {
+      // Clean up stream on error
+      if (streamRef.current) {
+        streamRef.current.getTracks().forEach(t => t.stop());
+        streamRef.current = null;
+      }
       if (err.name === 'NotAllowedError') {
         setError('Camera permission denied. Please allow camera access and try again.');
       } else if (err.name === 'NotFoundError') {
@@ -247,24 +260,25 @@ export default function SignRecognizer() {
           </div>
 
           <div className={`video-wrapper ${handDetected ? 'hand-active' : ''}`}>
-            {!cameraActive ? (
+            {!cameraActive && (
               <div className="cam-empty">
                 <div className="cam-empty-icon">📷</div>
                 <p>Camera is off</p>
                 <p className="cam-hint">Click "Start Camera" to begin recognizing signs</p>
               </div>
-            ) : (
-              <>
-                <video
-                  ref={videoRef}
-                  className="cam-video"
-                  playsInline
-                  muted
-                  autoPlay
-                />
-                <canvas ref={canvasRef} className="cam-canvas" />
-              </>
             )}
+            <video
+              ref={videoRef}
+              className="cam-video"
+              playsInline
+              muted
+              style={{ display: cameraActive ? 'block' : 'none' }}
+            />
+            <canvas
+              ref={canvasRef}
+              className="cam-canvas"
+              style={{ display: cameraActive ? 'block' : 'none' }}
+            />
           </div>
 
           {/* Camera Controls */}
