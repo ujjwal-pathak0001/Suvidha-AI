@@ -6,14 +6,25 @@ A modern full-stack web application that converts spoken words into text and map
 
 This project aims to bridge the communication gap for people who rely on sign language by transforming live speech input into meaningful sign-language representations. It is designed as both a practical accessibility tool and a strong portfolio project showcasing full-stack development, NLP, and UI/UX implementation.
 
+## 🌐 Live Deployment
+
+| Service | Live URL | Hosting |
+|---------|----------|---------|
+| 🚀 **Web App (Frontend)** | [suvidha-ai-nine.vercel.app](https://suvidha-ai-nine.vercel.app) | Vercel |
+| 📷 **Camera Sign Recognizer** | [suvidha-ai-nine.vercel.app/recognize](https://suvidha-ai-nine.vercel.app/recognize) | Vercel |
+| ⚙️ **Backend REST API** | [suvidha-ai-tool-for-isl.onrender.com](https://suvidha-ai-tool-for-isl.onrender.com) | Render |
+| 👑 **Django Admin Portal** | [suvidha-ai-tool-for-isl.onrender.com/admin/](https://suvidha-ai-tool-for-isl.onrender.com/admin/) | Render |
+
 ## ✨ Features
 
 - Live speech-to-text conversion using the browser Web Speech API
 - Text preprocessing and linguistic transformation with NLTK
+- Real-time camera-based Sign Language Recognition using MediaPipe + fingerpose
 - Conversion of processed text into sign-related outputs for animation rendering
 - User authentication and session-based access
 - Modern React-based frontend with a clean interface
 - Django REST API backend for handling auth and conversion requests
+
 
 ## 🛠️ Tech Stack
 
