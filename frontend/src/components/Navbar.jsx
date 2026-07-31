@@ -37,6 +37,7 @@ export default function Navbar() {
           {user && (
             <Link to="/convert" className={`nav-link ${isActive('/convert') ? 'active' : ''}`}>Converter</Link>
           )}
+          <Link to="/recognize" className={`nav-link ${isActive('/recognize') ? 'active' : ''}`}>Recognizer</Link>
         </div>
 
         {/* Auth buttons */}
@@ -73,6 +74,7 @@ export default function Navbar() {
         {user && (
           <Link to="/convert" onClick={() => setMenuOpen(false)} className={`nav-link ${isActive('/convert') ? 'active' : ''}`}>Converter</Link>
         )}
+        <Link to="/recognize" onClick={() => setMenuOpen(false)} className={`nav-link ${isActive('/recognize') ? 'active' : ''}`}>Recognizer</Link>
         {user ? (
           <>
             <span className="nav-username mobile">👤 {user.username}</span>

@@ -7,6 +7,7 @@ import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Converter from './pages/Converter';
 import About from './pages/About';
+import SignRecognizer from './pages/SignRecognizer';
 
 export default function App() {
   return (
@@ -18,6 +19,7 @@ export default function App() {
           <Route path="/login"   element={<Login />} />
           <Route path="/signup"  element={<Signup />} />
           <Route path="/about"   element={<About />} />
+          <Route path="/recognize" element={<SignRecognizer />} />
           <Route
             path="/convert"
             element={
