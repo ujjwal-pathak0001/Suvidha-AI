@@ -8,11 +8,13 @@ import Signup from './pages/Signup';
 import Converter from './pages/Converter';
 import About from './pages/About';
 import SignRecognizer from './pages/SignRecognizer';
+import ServerStatus from './components/ServerStatus';
 
 export default function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
+        <ServerStatus />
         <Navbar />
         <Routes>
           <Route path="/"        element={<Landing />} />

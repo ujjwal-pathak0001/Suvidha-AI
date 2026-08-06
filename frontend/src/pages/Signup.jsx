@@ -113,7 +113,7 @@ export default function Signup() {
           </div>
 
           <button type="submit" className="auth-btn" disabled={loading}>
-            {loading ? <span className="btn-spinner" /> : 'Create Account →'}
+            {loading ? <><span className="btn-spinner" /> Connecting…</> : 'Create Account →'}
           </button>
         </form>
 

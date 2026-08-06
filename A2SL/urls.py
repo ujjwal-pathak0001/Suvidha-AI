@@ -12,6 +12,7 @@ urlpatterns = [
     path('api/auth/logout/',  views.LogoutAPIView.as_view(),  name='api_logout'),
     path('api/auth/user/',    views.UserAPIView.as_view(),    name='api_user'),
     path('api/convert/',      views.ConvertAPIView.as_view(), name='api_convert'),
+    path('api/health/',        views.HealthCheckView.as_view(), name='api_health'),
 
     # ── Legacy Django template routes (kept for backwards compat) ───────────
     path('about/',     views.about_view,     name='about'),

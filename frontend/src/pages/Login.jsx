@@ -71,7 +71,7 @@ export default function Login() {
           </div>
 
           <button type="submit" className="auth-btn" disabled={loading}>
-            {loading ? <span className="btn-spinner" /> : 'Sign In →'}
+            {loading ? <><span className="btn-spinner" /> Connecting…</> : 'Sign In →'}
           </button>
         </form>
 

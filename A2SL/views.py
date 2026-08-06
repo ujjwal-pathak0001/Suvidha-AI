@@ -103,6 +103,13 @@ def process_text_to_signs(text):
 
 # ─── REST API Views ──────────────────────────────────────────────────────────
 
+class HealthCheckView(APIView):
+    """Ultra-lightweight endpoint for server warmup pings. No DB access."""
+    permission_classes = [AllowAny]
+    def get(self, request):
+        return Response({'status': 'ok'}, status=status.HTTP_200_OK)
+
+
 class SignupAPIView(APIView):
     permission_classes = [AllowAny]
 

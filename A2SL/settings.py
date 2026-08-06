@@ -9,12 +9,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 import nltk
 NLTK_DATA_DIR = os.path.join(BASE_DIR, 'nltk_data')
 nltk.data.path.append(NLTK_DATA_DIR)
-nltk.download('averaged_perceptron_tagger',     quiet=True)
-nltk.download('averaged_perceptron_tagger_eng', quiet=True)
-nltk.download('wordnet',  quiet=True)
-nltk.download('omw-1.4',  quiet=True)
-nltk.download('punkt',    quiet=True)
-nltk.download('punkt_tab',quiet=True)
+
 
 # ── Security ──────────────────────────────────────────────────────────────────
 SECRET_KEY = config('SECRET_KEY', default='3k7=!d39#4@_&5a6to&4=_=j(c^v0(vv91cj5+9e8+d4&+01jb')
