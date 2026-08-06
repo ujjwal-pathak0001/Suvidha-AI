@@ -40,7 +40,12 @@ export default function SignRecognizer() {
 
   // Initialize gesture estimator once
   useEffect(() => {
-    gestureEstimatorRef.current = new GestureEstimator(Gestures);
+    try {
+      gestureEstimatorRef.current = new GestureEstimator(Gestures);
+    } catch (err) {
+      console.error('Failed to initialize gesture estimator:', err);
+      setError('Failed to load gesture recognition. Please refresh the page.');
+    }
   }, []);
 
   // ── Start camera ─────────────────────────────────────────────────────────
@@ -48,41 +53,70 @@ export default function SignRecognizer() {
     setLoading(true);
     setError('');
     try {
-      // Initialize MediaPipe
-      await initHandLandmarker();
+      // Step 1: Get camera stream FIRST (so user sees video immediately)
+      let stream;
+      try {
+        stream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: 'user', width: { ideal: 640 }, height: { ideal: 480 } },
+          audio: false,
+        });
+      } catch (camErr) {
+        if (camErr.name === 'NotAllowedError') {
+          throw new Error('CAMERA_DENIED');
+        } else if (camErr.name === 'NotFoundError' || camErr.name === 'DevicesNotFoundError') {
+          throw new Error('CAMERA_NOT_FOUND');
+        } else {
+          throw new Error('CAMERA_ERROR:' + camErr.message);
+        }
+      }
 
-      // Get camera stream
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: 'user', width: { ideal: 640 }, height: { ideal: 480 } },
-        audio: false,
-      });
       streamRef.current = stream;
 
-      if (videoRef.current) {
-        videoRef.current.srcObject = stream;
-        // Wait for video to be ready before playing
-        await new Promise((resolve, reject) => {
-          videoRef.current.onloadedmetadata = () => {
-            videoRef.current.play()
-              .then(resolve)
-              .catch(reject);
-          };
-          videoRef.current.onerror = reject;
-        });
-      }
+      // Step 2: Attach stream to video element and wait for it to be ready
+      const video = videoRef.current;
+      if (!video) throw new Error('VIDEO_ELEMENT_MISSING');
+
+      video.srcObject = stream;
+
+      await new Promise((resolve, reject) => {
+        const timeout = setTimeout(() => reject(new Error('VIDEO_TIMEOUT')), 10000);
+        video.onloadedmetadata = () => {
+          clearTimeout(timeout);
+          video.play().then(resolve).catch(reject);
+        };
+        video.onerror = () => {
+          clearTimeout(timeout);
+          reject(new Error('VIDEO_PLAY_ERROR'));
+        };
+      });
+
       setCameraActive(true);
+
+      // Step 3: Initialize MediaPipe AI model (downloads ~5MB on first use)
+      try {
+        await initHandLandmarker();
+      } catch (modelErr) {
+        console.error('MediaPipe model init error:', modelErr);
+        setError('⚠️ AI model failed to load. Hand detection won\'t work, but camera is active. Try refreshing the page.');
+      }
+
     } catch (err) {
       // Clean up stream on error
       if (streamRef.current) {
         streamRef.current.getTracks().forEach(t => t.stop());
         streamRef.current = null;
       }
-      if (err.name === 'NotAllowedError') {
-        setError('Camera permission denied. Please allow camera access and try again.');
-      } else if (err.name === 'NotFoundError') {
-        setError('No camera found. Please connect a webcam.');
+      if (videoRef.current) videoRef.current.srcObject = null;
+
+      const msg = err.message || '';
+      if (msg === 'CAMERA_DENIED') {
+        setError('Camera permission denied. Please allow camera access in your browser settings and try again.');
+      } else if (msg === 'CAMERA_NOT_FOUND') {
+        setError('No camera found. Please connect a webcam and try again.');
+      } else if (msg === 'VIDEO_TIMEOUT') {
+        setError('Camera took too long to start. Please try again.');
       } else {
-        setError(`Camera error: ${err.message}`);
+        setError(`Camera error: ${msg.replace('CAMERA_ERROR:', '')}`);
       }
     } finally {
       setLoading(false);

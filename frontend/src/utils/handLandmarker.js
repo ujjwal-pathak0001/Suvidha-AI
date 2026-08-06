@@ -2,6 +2,7 @@ import { FilesetResolver, HandLandmarker } from '@mediapipe/tasks-vision';
 
 let handLandmarker = null;
 let lastVideoTime = -1;
+let isInitializing = false;
 
 /**
  * Initialize the MediaPipe HandLandmarker.
@@ -9,25 +10,57 @@ let lastVideoTime = -1;
  */
 export async function initHandLandmarker() {
   if (handLandmarker) return handLandmarker;
+  if (isInitializing) return null; // prevent double init
 
-  const vision = await FilesetResolver.forVisionTasks(
-    'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm'
-  );
+  isInitializing = true;
 
-  handLandmarker = await HandLandmarker.createFromOptions(vision, {
-    baseOptions: {
-      modelAssetPath:
-        'https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task',
-      delegate: 'GPU',
-    },
-    runningMode: 'VIDEO',
-    numHands: 1,
-    minHandDetectionConfidence: 0.5,
-    minHandPresenceConfidence: 0.5,
-    minTrackingConfidence: 0.5,
-  });
+  try {
+    const vision = await FilesetResolver.forVisionTasks(
+      'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm'
+    );
 
-  return handLandmarker;
+    handLandmarker = await HandLandmarker.createFromOptions(vision, {
+      baseOptions: {
+        modelAssetPath:
+          'https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task',
+        delegate: 'GPU',
+      },
+      runningMode: 'VIDEO',
+      numHands: 1,
+      minHandDetectionConfidence: 0.5,
+      minHandPresenceConfidence: 0.5,
+      minTrackingConfidence: 0.5,
+    });
+
+    return handLandmarker;
+  } catch (err) {
+    console.error('Failed to init HandLandmarker with GPU, trying CPU:', err);
+    // Fallback to CPU if GPU delegate fails
+    try {
+      const vision = await FilesetResolver.forVisionTasks(
+        'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm'
+      );
+
+      handLandmarker = await HandLandmarker.createFromOptions(vision, {
+        baseOptions: {
+          modelAssetPath:
+            'https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task',
+        },
+        runningMode: 'VIDEO',
+        numHands: 1,
+        minHandDetectionConfidence: 0.5,
+        minHandPresenceConfidence: 0.5,
+        minTrackingConfidence: 0.5,
+      });
+
+      return handLandmarker;
+    } catch (cpuErr) {
+      console.error('HandLandmarker init failed completely:', cpuErr);
+      throw cpuErr;
+    }
+  } finally {
+    isInitializing = false;
+  }
 }
 
 /**
@@ -46,7 +79,7 @@ export function detectHands(video, timestamp) {
   lastVideoTime = timestamp;
 
   try {
-    const result = handLandmarker.detectForVideo(video, timestamp);
+    const result = handLandmarker.detectForVideo(video, Math.round(timestamp));
     if (result.landmarks && result.landmarks.length > 0) {
       return {
         landmarks: result.landmarks[0],        // 21 normalized landmarks
@@ -78,7 +111,11 @@ export function landmarksToFingerpose(landmarks, videoWidth, videoHeight) {
  */
 export function closeHandLandmarker() {
   if (handLandmarker) {
-    handLandmarker.close();
+    try {
+      handLandmarker.close();
+    } catch (e) {
+      // ignore close errors
+    }
     handLandmarker = null;
     lastVideoTime = -1;
   }
